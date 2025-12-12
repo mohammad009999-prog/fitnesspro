@@ -1,0 +1,17 @@
+[
+  {
+    "name":"Rotator Cuff Tendinitis",
+    "description":"Inflammation of the tendons around the shoulder joint. Often caused by repetitive overhead motions or improper lifting form.",
+    "instructions":"Rest, ice, anti-inflammatories. Focus on light external/internal rotation exercises with bands."
+  },
+  {
+    "name":"Lower Back Strain",
+    "description":"Pain/stiffness in the lower back muscles, usually from lifting heavy objects improperly (rounding the back).",
+    "instructions":"Gentle stretching (cat-cow, child's pose), heat, rest. Focus on core stability exercises once pain subsides."
+  },
+  {
+    "name":"Patellofemoral Pain Syndrome (Runner's Knee)",
+    "description":"Dull, aching pain felt under or around the kneecap. Common in runners or lifters with weak quads/hips.",
+    "instructions":"Strengthening exercises for the VMO (inner quad) and glutes (hip abductors). Ensure proper squat/lunge form."
+  }
+]

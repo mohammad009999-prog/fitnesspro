@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Arnold Schwarzenegger",
+    "image": "arnold",
+    "details": "Known as the Austrian Oak, a seven-time Mr. Olympia winner and a global icon."
+  },
+  {
+    "name": "Ronnie Coleman",
+    "image": "ronnie",
+    "details": "Known for his incredible size and strength, an eight-time Mr. Olympia winner."
+  },
+  {
+    "name": "Dorian Yates",
+    "image": "doryan",
+    "details": "The Shadow, known for his revolutionary high-intensity training style and six Mr. Olympia titles."
+  }
+]

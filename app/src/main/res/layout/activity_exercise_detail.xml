@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/tvMusclesLabel"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="16dp"/>
+        <TextView android:id="@+id/tvMuscles"
+            android:textSize="16sp"
+            android:paddingBottom="16dp"/>
+
+        <TextView android:id="@+id/tvTutorialLabel"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+        <TextView android:id="@+id/tvTutorial"
+            android:textSize="16sp"
+            android:paddingBottom="16dp"/>
+
+        <TextView android:id="@+id/tvMistakesLabel"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+        <TextView android:id="@+id/tvMistakes"
+            android:textSize="16sp"
+            android:paddingBottom="16dp"/>
+
+        <TextView android:id="@+id/tvNotesLabel"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+        <TextView android:id="@+id/tvNotes"
+            android:textSize="16sp"
+            android:paddingBottom="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

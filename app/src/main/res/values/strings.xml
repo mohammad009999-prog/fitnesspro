@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Fitness Pro</string>
+
+    <string name="exercises">Exercises</string>
+    <string name="injuries">Injuries</string>
+    <string name="supplements">Supplements</string>
+    <string name="bodybuilders">Bodybuilders</string>
+    <string name="gyms">Gyms</string>
+    <string name="nutrition">Nutrition</string>
+    <string name="settings">Settings</string>
+
+    <string name="muscles_worked">Muscles Worked</string>
+    <string name="how_to_tutorial">How-to Tutorial</string>
+    <string name="mistakes_to_avoid">Mistakes to Avoid</string>
+    <string name="notes">Notes</string>
+
+    <string name="select_language">Select Language</string>
+    <string name="dark_mode">Dark Mode</string>
+
+</resources>

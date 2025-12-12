@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Powerhouse Gym Central",
+    "location": "Downtown District, 123 Main St",
+    "features": "24-hour access, Olympic lifting platforms, dedicated cardio studio.",
+    "description": "The largest and most comprehensive gym in the city, known for its serious training environment and wide variety of equipment."
+  },
+  {
+    "name": "Fitness Zone East Side",
+    "location": "East Side Mall, 456 Oak Ave",
+    "features": "Pool, sauna, group classes (Zumba, Spin), child care.",
+    "description": "A family-friendly facility focusing on general wellness and group fitness, offering amenities beyond standard weight training."
+  },
+  {
+    "name": "Iron Temple Weightlifting Club",
+    "location": "Industrial Park, 789 Factory Rd",
+    "features": "Specialized deadlift bars, competition benches, experienced powerlifting coaches.",
+    "description": "A no-frills, heavy-lifting-focused club for serious powerlifters and bodybuilders. Equipment is old-school and heavy-duty."
+  }
+]

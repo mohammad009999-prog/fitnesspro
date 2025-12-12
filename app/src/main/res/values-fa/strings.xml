@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">تناسب اندام حرفه‌ای</string>
+    <string name="exercises">تمرینات</string>
+    <string name="injuries">آسیب‌دیدگی‌ها</string>
+    <string name="supplements">مکمل‌ها</string>
+    <string name="bodybuilders">بدنسازان مشهور</string>
+    <string name="gyms">باشگاه‌ها</string>
+    <string name="nutrition">تغذیه</string>
+    <string name="settings">تنظیمات</string>
+    <string name="muscles_worked">عضلات درگیر</string>
+    <string name="how_to_tutorial">راهنمای انجام</string>
+    <string name="mistakes_to_avoid">اشتباهات رایج</string>
+    <string name="notes">نکات</string>
+    <string name="dark_mode">حالت تیره</string>
+    <string name="select_language">انتخاب زبان:</string>
+</resources>

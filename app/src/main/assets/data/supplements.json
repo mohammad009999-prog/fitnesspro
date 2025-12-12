@@ -1,0 +1,17 @@
+[
+  {
+    "name":"Creatine Monohydrate",
+    "explanation":"Increases muscle water content and ATP regeneration, boosting strength and power.",
+    "instructions":"Dose: 3-5g daily, taken consistently. Always stay hydrated."
+  },
+  {
+    "name":"Whey Protein",
+    "explanation":"Fast-digesting, high-quality protein source, ideal for rapid muscle repair post-workout.",
+    "instructions":"Dose: 20-40g immediately post-workout or to hit daily protein goals. Note: Best taken post-workout."
+  },
+  {
+    "name":"Casein Protein",
+    "explanation":"Slow-digesting protein, providing a sustained release of amino acids, ideal before long fasts (like sleep).",
+    "instructions":"Dose: 20-40g before bed. Note: Excellent pre-sleep protein source."
+  }
+]
