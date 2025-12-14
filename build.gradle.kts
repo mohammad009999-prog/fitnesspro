@@ -1,9 +1,6 @@
-// Root Project-level build.gradle.kts (CLEANED)
-
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
+    // These lines use the version defined in libs.versions.toml (the version catalog)
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
 }
-
-// REMOVED THE allprojects { repositories { ... } } BLOCK HERE
-// It is now moved to settings.gradle.kts

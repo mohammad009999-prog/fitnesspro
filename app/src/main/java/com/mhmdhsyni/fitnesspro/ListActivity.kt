@@ -1,119 +1,148 @@
-package com.fitnesspro
+package com.mhmdhsyni.fitnesspro // Corrected package
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
-import com.fitnesspro.databinding.ActivityListBinding
-import org.json.JSONArray
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
-class ListActivity : AppCompatActivity() {
+// ListActivity now inherits from LanguageActivity (the correct base class)
+class ListActivity : LanguageActivity(), FitnessAdapter.OnItemClickListener {
 
-    private lateinit var binding: ActivityListBinding
+    companion object {
+        const val LIST_CATEGORY = "list_category"
+        private const val TAG = "ListActivity"
+    }
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: FitnessAdapter
+    private lateinit var categoryTitle: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_list) // Assumes this layout exists
 
-        val type = intent.getStringExtra("TYPE") ?: ""
-        val group = intent.getStringExtra("GROUP") // Only set for exercises
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // 1. Load and Filter Data based on TYPE and GROUP
-        val (finalArray, itemType) = loadData(type, group)
+        // 1. Get the category title passed from the previous activity
+        categoryTitle = intent.getStringExtra(LIST_CATEGORY) ?: "Category"
+        title = categoryTitle // Set the Activity title bar
 
-        // Set screen title (e.g., "Injuries" or "Chest")
-        title = group ?: type.replaceFirstChar { it.uppercase() }
+        // 2. Prepare the data list
+        val fitnessItems = FitnessData.getListByCategory(categoryTitle)
 
-        // 2. Extract names for the list view
-        val names = ArrayList<String>()
-        for (i in 0 until finalArray.length()) {
-            names.add(finalArray.getJSONObject(i).optString("name"))
+        if (fitnessItems.isEmpty()) {
+            Log.w(TAG, "No items found for category: $categoryTitle")
+            Toast.makeText(this, "No data found for this category.", Toast.LENGTH_LONG).show()
         }
 
-        binding.listView.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, names)
+        // 3. Setup RecyclerView
+        // NOTE: Ensure your activity_list.xml has an ID: @+id/recycler_view_list
+        recyclerView = findViewById(R.id.recycler_view_list)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 3. Handle Clicks: Route to the appropriate detail screen
-        binding.listView.setOnItemClickListener { _, _, _, position ->
-            val itemData = finalArray.getJSONObject(position)
+        // 4. Setup Adapter
+        adapter = FitnessAdapter(fitnessItems, this)
+        recyclerView.adapter = adapter
+    }
 
-            when (itemType) {
-                "exercises" -> {
-                    // Route to the complex Exercise Detail screen
-                    val intent = Intent(this, ExerciseDetailActivity::class.java)
-                    intent.putExtra("EXERCISE_JSON", itemData.toString()) // Sends the full JSON object as a string
-                    startActivity(intent)
+    // Handle clicks on items in the RecyclerView
+    override fun onItemClick(item: BaseFitnessItem) {
+        val intent: Intent
+
+        if (FitnessData.isExerciseCategory(categoryTitle)) {
+            intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.DETAIL_TITLE, item.title)
+        } else {
+            intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.DETAIL_TITLE, item.title)
+        }
+
+        startActivity(intent)
+    }
+
+    // Enables the Up button functionality
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+}
+
+// ====================================================================
+// MERGED FITNESS ADAPTER CONTENT
+// ====================================================================
+
+// This class definition is required by ListActivity
+class FitnessAdapter(
+    private val items: List<BaseFitnessItem>,
+    private val listener: OnItemClickListener
+) : RecyclerView.Adapter<FitnessAdapter.ItemViewHolder>() {
+
+    // 1. Define the interface for item clicks
+    interface OnItemClickListener {
+        fun onItemClick(item: BaseFitnessItem)
+    }
+
+    // 2. ViewHolder class
+    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // These IDs must match list_item_fitness.xml
+        val title: TextView = itemView.findViewById(R.id.item_title)
+        val subtitle: TextView = itemView.findViewById(R.id.item_subtitle)
+        val image: ImageView = itemView.findViewById(R.id.item_image)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(items[position])
                 }
-                "nutrition" -> {
-                    // Custom formatting for Nutrition data (Cal, Protein, Carbs, Fat)
-                    val intent = Intent(this, DetailActivity::class.java)
-                    intent.putExtra("TITLE", itemData.optString("name"))
+            }
+        }
 
-                    val content = buildString {
-                        append("Calories: ${itemData.optString("calories", "N/A")}\n")
-                        append("Protein: ${itemData.optString("protein", "N/A")}\n")
-                        append("Carbs: ${itemData.optString("carbs", "N/A")}\n")
-                        append("Fat: ${itemData.optString("fat", "N/A")}\n\n")
-                        append("Description: ${itemData.optString("description", "")}")
-                    }
+        fun bind(item: BaseFitnessItem) {
+            title.text = item.title
 
-                    intent.putExtra("CONTENT", content)
-                    startActivity(intent)
-                }
-                else -> {
-                    // Generic handler for Injury/Supplement/Gyms
-                    val intent = Intent(this, DetailActivity::class.java)
-                    intent.putExtra("TITLE", itemData.optString("name"))
+            val subtitleText = when (item) {
+                is FitnessItem -> item.category
+                is FoodItem -> "Calories: ${item.calories}"
+                is BodybuilderProfile -> item.careerHighlights
+                else -> item.description
+            }
+            subtitle.text = subtitleText
 
-                    val content = itemData.optString("instructions",
-                        itemData.optString("description",
-                            itemData.optString("explanation", "")))
-
-                    intent.putExtra("CONTENT", content)
-                    startActivity(intent)
-                }
+            val imageResId = when (item) {
+                is FitnessItem -> item.imageResource
+                is FoodItem -> item.imageResource
+                is BodybuilderProfile -> item.imageResource
+                else -> 0
+            }
+            if (imageResId != 0) {
+                image.setImageResource(imageResId)
+                image.visibility = View.VISIBLE
+            } else {
+                image.visibility = View.GONE
             }
         }
     }
 
-    // Loads the correct JSON file based on the 'type'
-    private fun loadData(type: String, group: String?): Pair<JSONArray, String> {
-        return when (type) {
-            "exercises" -> Pair(getExercisesForGroup(group), "exercises")
-            "injuries" -> Pair(loadJson("injuries"), "injuries")
-            "supplements" -> Pair(loadJson("supplements"), "supplements")
-            "gyms" -> Pair(loadJson("gyms"), "gyms")
-            "nutrition" -> Pair(loadJson("food_database"), "nutrition")
-            else -> Pair(JSONArray(), "unknown")
-        }
+    // 3. Create ViewHolder (inflates the layout)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        // This layout name must exist in res/layout/
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_fitness, parent, false)
+        return ItemViewHolder(view)
     }
 
-    // Filters the main exercises_grouped.json file by the specific muscle group
-    private fun getExercisesForGroup(groupName: String?): JSONArray {
-        if (groupName.isNullOrEmpty()) return JSONArray()
-
-        val allGroups = loadJson("exercises_grouped")
-        for (i in 0 until allGroups.length()) {
-            val groupObj = allGroups.getJSONObject(i)
-            if (groupObj.optString("group") == groupName) {
-                return groupObj.optJSONArray("exercises") ?: JSONArray()
-            }
-        }
-        return JSONArray()
+    // 4. Bind data to ViewHolder
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        holder.bind(items[position])
     }
 
-    // Utility function (safely loading JSON)
-    private fun loadJson(filename: String): JSONArray {
-        try {
-            val inputStream = assets.open("data/$filename.json")
-            val jsonString = inputStream.bufferedReader().use { it.readText() }
-            return JSONArray(jsonString)
-        } catch (e: Exception) {
-            Log.e("ListActivity", "Error loading JSON for $filename: ${e.message}")
-            return JSONArray()
-        }
-    }
+    // 5. Get item count
+    override fun getItemCount() = items.size
 }

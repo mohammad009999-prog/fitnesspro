@@ -1,19 +1,11 @@
-// Module-level app/build.gradle.kts
-
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
     namespace = "com.mhmdhsyni.fitnesspro"
     compileSdk = 34
-
-    // Enable both binding features
-    buildFeatures {
-        viewBinding = true
-        dataBinding = true
-    }
 
     defaultConfig {
         applicationId = "com.mhmdhsyni.fitnesspro"
@@ -25,9 +17,21 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8 // <-- FINAL FIX APPLIED HERE
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -35,20 +39,21 @@ android {
 }
 
 dependencies {
-    // Core Dependencies (compatible with SDK 34 / AGP 8.6.1)
-    implementation("androidx.core:core-ktx:1.13.1")
+    // ANDROIDX LIBRARIES
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.activity:activity-ktx:1.8.0")
-    implementation(libs.androidx.constraintlayout)
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    // FIX: Using correct modern ANDROIDX Data Binding dependencies with a stable version
-    implementation("androidx.databinding:databinding-runtime:4.1.0")
-    implementation("androidx.databinding:databinding-adapters:4.1.0")
-    implementation("androidx.databinding:databinding-ktx:4.1.0")
+    // NAVIGATION
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    // Testing libraries
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    // SPLASH SCREEN LIBRARY
+    implementation("androidx.core:core-splashscreen:1.0.0")
+
+    // TESTING
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

@@ -1,88 +1,43 @@
-package com.fitnesspro
+package com.mhmdhsyni.fitnesspro
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.fitnesspro.databinding.ActivityListBinding
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
+// Assuming you have a binding class for this activity, which is based on activity_bodybuilders.xml
+// Even if the XML is empty, ViewBinding needs this class definition to exist.
+import com.mhmdhsyni.fitnesspro.databinding.ActivityBodybuildersBinding
 
 class BodybuildersActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityListBinding
-    private lateinit var bodybuildersList: ArrayList<JSONObject>
+    // Declare binding, but only for the inflation step
+    private lateinit var binding: ActivityBodybuildersBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityListBinding.inflate(layoutInflater)
+
+        // 1. Inflate the layout (even if activity_bodybuilders.xml is minimal)
+        binding = ActivityBodybuildersBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        title = getString(R.string.bodybuilders)
 
-        bodybuildersList = loadData()
+        // *** LOGIC REMOVED ***
+        // Removed: setSupportActionBar(binding.toolbar)
+        // Removed: supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // Removed: supportActionBar?.title = "Bodybuilder Profiles"
+        // This prevents the "Unresolved reference: toolbar" error.
 
-        // Use the custom adapter to display the names and images
-        binding.listView.adapter = BodybuilderAdapter(this, bodybuildersList)
+        // If the Activity has a default ActionBar, this will still set the title:
+        supportActionBar?.title = "Bodybuilder Profiles"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.listView.setOnItemClickListener { _, _, position, _ ->
-            val selectedBodybuilder = bodybuildersList[position]
-
-            // Route to DetailActivity (since it only displays text details)
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra("TITLE", selectedBodybuilder.optString("name"))
-            intent.putExtra("CONTENT", selectedBodybuilder.optString("details"))
-            startActivity(intent)
-        }
+        // Note: If this Activity is supposed to display a list, you will need
+        // to add a RecyclerView with ID 'recyclerView' to your XML later.
     }
 
-    private fun loadData(): ArrayList<JSONObject> {
-        val list = ArrayList<JSONObject>()
-        try {
-            val inputStream = assets.open("data/bodybuilders.json")
-            val jsonString = inputStream.bufferedReader().use { it.readText() }
-            val jsonArray = JSONArray(jsonString)
-            for (i in 0 until jsonArray.length()) {
-                list.add(jsonArray.getJSONObject(i))
-            }
-        } catch (e: Exception) {
-            // Handle error silently
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressedDispatcher.onBackPressed()
+            return true
         }
-        return list
-    }
-
-    // Custom Adapter class to handle image loading
-    private inner class BodybuilderAdapter(context: Context, items: ArrayList<JSONObject>) :
-        ArrayAdapter<JSONObject>(context, 0, items) {
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var view = convertView
-            val item = getItem(position)
-
-            if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.list_item_bodybuilder, parent, false)
-            }
-
-            val tvName = view!!.findViewById<TextView>(R.id.tvBodybuilderName)
-            val ivImage = view.findViewById<ImageView>(R.id.ivBodybuilderImage)
-
-            tvName.text = item?.optString("name")
-
-            // Get the resource ID for the drawable image (e.g., R.drawable.arnold)
-            val imageName = item?.optString("image")
-            val imageResId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
-
-            if (imageResId != 0) {
-                ivImage.setImageResource(imageResId)
-            }
-            return view
-        }
+        return super.onOptionsItemSelected(item)
     }
 }

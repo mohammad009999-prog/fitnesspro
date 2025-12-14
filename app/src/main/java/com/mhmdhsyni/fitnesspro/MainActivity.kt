@@ -1,49 +1,40 @@
-package com.fitnesspro
+package com.mhmdhsyni.fitnesspro
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.fitnesspro.databinding.ActivityMainBinding
+import android.widget.Button
+import androidx.cardview.widget.CardView
 
-class MainActivity : AppCompatActivity() {
-
-    // Declare the binding object for ViewBinding
-    private lateinit var binding: ActivityMainBinding
+// MainActivity MUST inherit from LanguageActivity
+class MainActivity : LanguageActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main) // Assumes this layout exists
 
-        // Initialize ViewBinding and set content view
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        // Example click listeners for main navigation cards
+        setupCardClickListener(R.id.card_exercises, "Exercises")
+        setupCardClickListener(R.id.card_nutrition, "Nutrition")
+        setupCardClickListener(R.id.card_settings, "Settings")
+        setupCardClickListener(R.id.card_profiles, "Bodybuilders") // Example category
 
-        // --- Setup Button Listeners ---
-        // Exercises goes to the grouping screen
-        binding.btnExercises.setOnClickListener {
-            startActivity(Intent(this, ExerciseGroupActivity::class.java))
-        }
-
-        // These use the generic list router
-        binding.btnInjuries.setOnClickListener { openListActivity("injuries") }
-        binding.btnSupplements.setOnClickListener { openListActivity("supplements") }
-        binding.btnGyms.setOnClickListener { openListActivity("gyms") }
-        binding.btnNutrition.setOnClickListener { openListActivity("nutrition") }
-
-        // These go to specific screens
-        binding.btnBodybuilders.setOnClickListener {
-            startActivity(Intent(this, BodybuildersActivity::class.java))
-        }
-        binding.btnSettings.setOnClickListener {
+        // Assuming you have a button or card for settings
+        findViewById<Button>(R.id.btn_settings)?.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
     }
 
-    /**
-     * Helper function to send the data type to the ListActivity router.
-     */
-    private fun openListActivity(type: String) {
-        val intent = Intent(this, ListActivity::class.java)
-        intent.putExtra("TYPE", type)
-        startActivity(intent)
+    private fun setupCardClickListener(cardId: Int, categoryName: String) {
+        findViewById<CardView>(cardId)?.setOnClickListener {
+            // Check if it's the Settings card to launch SettingsActivity
+            if (categoryName == "Settings") {
+                startActivity(Intent(this, SettingsActivity::class.java))
+            } else {
+                // Otherwise, launch ListActivity with the category title
+                val intent = Intent(this, ListActivity::class.java)
+                intent.putExtra(ListActivity.LIST_CATEGORY, categoryName)
+                startActivity(intent)
+            }
+        }
     }
 }

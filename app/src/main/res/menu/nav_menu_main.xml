@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_exercises"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="@string/nav_exercises" />
+        <item
+            android:id="@+id/nav_nutrition"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="@string/nav_nutrition" />
+        <item
+            android:id="@+id/nav_supplements"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="@string/nav_supplements" />
+        <item
+            android:id="@+id/nav_injuries"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="@string/nav_injuries" />
+        <item
+            android:id="@+id/nav_bodybuilders"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="@string/nav_bodybuilders" />
+    </group>
+
+    <item android:title="Services">
+        <menu>
+            <item
+                android:id="@+id/nav_gyms"
+                android:icon="@drawable/ic_launcher_foreground"
+                android:title="@string/nav_gyms" />
+            <item
+                android:id="@+id/nav_trainer"
+                android:icon="@drawable/ic_launcher_foreground"
+                android:title="@string/nav_trainer" />
+        </menu>
+    </item>
+
+    <item android:title="Application">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_launcher_foreground"
+                android:title="@string/nav_settings" />
+        </menu>
+    </item>
+</menu>
